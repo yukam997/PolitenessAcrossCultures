@@ -1,0 +1,4 @@
+pandas 2.2.3
+memo-lang 1.1.2
+jax 0.5.3
+cma 4.0.0
