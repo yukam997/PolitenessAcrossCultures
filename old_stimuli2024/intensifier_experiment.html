@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hello World</title>
+    <meta http-equiv="pragma" content="no-cache">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.1"></script>
+    <script src="jquery-csv.js"></script>
+    <script src="/path/to/cdn/jquery.slim.min.js"></script>
+    <script src="/path/to/src/jquery.csv.min.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.2"></script>
+    <script src="utils.js"></script>
+</head>
+
+<body></body>
+
+<script>
+    // Initialize the jsPsych object (possibly with arguments: https://www.jspsych.org/7.3/reference/jspsych/)
+    var jsPsych = initJsPsych();
+    // Define `url_write_data_php` and `output_filename` for the `write_data_to_server` function
+    var url_experiment_dir = "http://127.0.0.1:5500/"
+    var url_write_data_php = url_experiment_dir + 'write_data.php';
+    var subject_id = jsPsych.data.getURLVariable('subject_id'); // <-- use URL variables?
+    console.log(`subject_id from URL: ${subject_id}`);
+    if (!subject_id) {
+        subject_id = jsPsych.randomization.randomID(10);
+        console.log(`subject_id randomly assigned: ${subject_id}`);
+    }
+    var output_filename = `data/subject_${subject_id}.json`;
+    console.log(`Data will be saved to: ${url_experiment_dir + output_filename}`);
+
+    // Initialize a timeline (just an empty array)
+    // read intensifier_scenarios.csv
+    var intensifier_scenarios = $.csv.toObjects("intensifier_scenarios.csv");
+    // console.log(intensifier_scenarios);
+    var timeline = [];
+    for (var i = 0; i < 3; i++) {
+        var trial = {
+            type: jsPsychHtmlSliderResponse,
+            stimulus: '<p>' + 'hi'+ '</p>',
+            require_movement: true,
+            labels: ['1 - not cold at all.', '7 - very cold'],
+        };
+        timeline.push(trial);
+    }
+
+    // Run the timeline
+    jsPsych.run(timeline);
+    write_data_to_server()
+</script>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Experiment</title>
+    <meta http-equiv="pragma" content="no-cache">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-external-html@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.3"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+    <script src="util.js"></script>
+    <script src="data2.js"></script>
+</head>
+
+<body></body>
+
+<script>
+    // Initialize the jsPsych object (possibly with arguments: https://www.jspsych.org/7.3/reference/jspsych/)
+    var jsPsych = initJsPsych();
+    // Define `url_write_data_php` and `output_filename` for the `write_data_to_server` function
+    var url_experiment_dir = "http://18.18.93.98:8001/"
+    var url_write_data_php = url_experiment_dir + 'write_data.php';
+    var subject_id = jsPsych.data.getURLVariable('subject_id'); // <-- use URL variables?
+    console.log(`subject_id from URL: ${subject_id}`);
+    if (!subject_id) {
+        subject_id = jsPsych.randomization.randomID(10);
+        console.log(`subject_id randomly assigned: ${subject_id}`);
+    }
+    var output_filename = `data/subject_${subject_id}.json`;
+    console.log(`Data will be saved to: ${url_experiment_dir + output_filename}`);
+
+    // Initialize a timeline (just an empty array)
+    var timeline = [];
+    for (var i = 0; i < data.length; i++) {
+        var trial = {
+            type: jsPsychHtmlSliderResponse,
+            stimulus: '<p>' + data[i]['scenario context'] +'</p><p>On a scale from \"' +data[i]['Label for 0'] + '\" to \"' +data[i]['Label for 7']+'\", '+ data[i]['Question to ask'] + '</p>',
+            require_movement: true,
+            labels: [data[i]['Label for 0'], data[i]['Label for 7']],
+        };
+        timeline.push(trial);
+        var trial = {
+            type: jsPsychHtmlSliderResponse,
+            stimulus: '<p>' + data[i]['scenario context'].replace(data[i]['intensifier'], '') + '</p><p>On a scale from \"' +data[i]['Label for 0'] +  '\" to \"' +data[i]['Label for 7']+'\", '+ data[i]['Question to ask']+'</p>',
+            require_movement: true,
+            labels: [data[i]['Label for 0'], data[i]['Label for 7']],
+        };
+        timeline.push(trial);
+    }
+    timeline = jsPsych.randomization.shuffle(timeline)
+    var consent = {
+        type: jsPsychExternalHtml,
+        url: "consent.html",
+        cont_btn: "agree",
+    }
+    var country = {
+        type: jsPsychSurveyText,
+        questions: [
+            {prompt: 'Which country are you from?', required:true}
+        ]
+    }
+    
+    var final_timeline = [consent].concat(timeline,[country]);
+    // Run the timeline
+    var debrief = {
+        type: jsPsychSurveyHtmlForm,
+        html: '<p>Thank you very much for your participation!<br><br>Please let us know if you have any other comments.<br><textarea name="comments" rows="5" cols="50"></textarea><br><br><br>Please enter your Prolific ID.<input size = 15 name="prolific"></input>',
+        // button_label: 'Return',
+    }
+    final_timeline.push(debrief)
+    jsPsych.run(final_timeline);
+    write_data_to_server()
+</script>
+
+</html>
