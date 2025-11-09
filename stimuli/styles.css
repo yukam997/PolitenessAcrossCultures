@@ -1,0 +1,31 @@
+/* .jspsych-html-slider-response-container { */
+/*     width: 80vw !important; */
+/* } */
+
+.container {
+    max-width: 800px;
+    text-align: left;
+}
+
+.jspsych-content {
+    /* text-align: left !important; */
+}
+
+.jspsych-content-wrapper {
+    max-width: 800px !important;
+    /* text-align: left !important; */
+}
+
+/* .jspsych-html-slider-response-stimulus { */
+/*     text-align: left !important; */
+/* } */
+
+.scale {
+    text-align: center;
+    padding-top: 20px;
+    font-weight: bold;
+}
+.stimulus {
+    text-align: left;
+    /* line-height: 2; */
+}
