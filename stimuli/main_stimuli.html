@@ -30,7 +30,8 @@
             write_data_to_server()
         }
 
-    });
+    })
+    
     // Define `url_write_data_php` and `output_filename` for the `write_data_to_server` function
     var url_experiment_dir = "http://18.18.93.98:8004/"
     var url_write_data_php = url_experiment_dir + 'write_data.php';
@@ -48,17 +49,10 @@
     for (var i = 0; i < data.length; i++) {
         var trial = {
             type: jsPsychHtmlSliderResponse,
-            stimulus: '<p class="stimulus">' + data[i]['scenario context'] + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[i]['question to ask']) + '</b></p>',
+            stimulus: '<p class="stimulus">' + data[i]['scenarios'] + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[i]['question to ask']) + '</b></p>',
             require_movement: true,
             labels: [data[i]['left of slider'], data[i]['right of slider']],
         };
-        // timeline.push(trial);
-        // var trial = {
-        //     type: jsPsychHtmlSliderResponse,
-        //     stimulus: '<p class="stimulus">' + data[i]['scenario context'].replace(data[i]['intensifier'], '') + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[i]['Question to ask']) + '</b></p>',
-        //     require_movement: true,
-        //     labels: [data[i]['left of slider'], data[i]['right of slider']],
-        // };
         timeline.push(trial);
     }
     timeline = jsPsych.randomization.shuffle(timeline)
