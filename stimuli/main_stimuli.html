@@ -31,7 +31,8 @@
         }
 
     })
-    
+    var modifier_list = ['slightly', 'kind of', 'quite', 'very', 'extremely']
+
     // Define `url_write_data_php` and `output_filename` for the `write_data_to_server` function
     var url_experiment_dir = "http://18.18.93.98:8004/"
     var url_write_data_php = url_experiment_dir + 'write_data.php';
@@ -47,11 +48,36 @@
     var timeline = [];
 
     for (var i = 0; i < data.length; i++) {
+        if (i%5 == 0) {
+            // Shuffle the modifier list every 5 trials
+            modifier_list = jsPsych.randomization.shuffle(modifier_list);
+        }
         var trial = {
             type: jsPsychHtmlSliderResponse,
-            stimulus: '<p class="stimulus">' + data[i]['scenarios'] + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[i]['question to ask']) + '</b></p>',
+            stimulus: '<p class="stimulus">' + data[2*i]['scenarios'].replace("[modifier]", modifier_list[i%5]) + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i]['question to ask']) + '</b></p>',
             require_movement: true,
-            labels: [data[i]['left of slider'], data[i]['right of slider']],
+            labels: [data[2*i]['left of slider'], data[2*i]['right of slider']],
+        };
+        timeline.push(trial);
+        var trial = {
+            type: jsPsychHtmlSliderResponse,
+            stimulus: '<p class="stimulus">' + data[2*i]['scenarios'].replace("[modifier]",'') + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i]['question to ask']) + '</b></p>',
+            require_movement: true,
+            labels: [data[2*i]['left of slider'], data[2*i]['right of slider']],
+        };
+        timeline.push(trial);
+        var trial = {
+            type: jsPsychHtmlSliderResponse,
+            stimulus: '<p class="stimulus">' + data[2*i+1]['scenarios'].replace("[modifier]",  modifier_list[i%5]) + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i+1]['question to ask']) + '</b></p>',
+            require_movement: true,
+            labels: [data[2*i+1]['left of slider'], data[2*i+1]['right of slider']],
+        };
+        timeline.push(trial);
+        var trial = {
+            type: jsPsychHtmlSliderResponse,
+            stimulus: '<p class="stimulus">' + data[2*i+1]['scenarios'].replace("[modifier]", '') + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i+1]['question to ask']) + '</b></p>',
+            require_movement: true,
+            labels: [data[2*i+1]['left of slider'], data[2*i+1]['right of slider']],
         };
         timeline.push(trial);
     }
