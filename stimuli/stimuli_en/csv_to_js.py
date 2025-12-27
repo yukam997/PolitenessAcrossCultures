@@ -3,7 +3,7 @@ import json
 
 # Load the CSV file
 file_path = 'scenarios.csv'  # Change this to the actual path
-output_path = 'data.js'
+output_path = 'scenarios.js'
 data = pd.read_csv(file_path, encoding="utf-8")
 # Extract the relevant columns with original column names
 extracted_data = data[['baseline', 'c1', 'c2', 'politeness question', 'left of slider', 'right of slider']]
@@ -17,7 +17,7 @@ extracted_data = data[['baseline', 'c1', 'c2', 'politeness question', 'left of s
 #     modifier_list.extend(shuffled)
 rows_list = []
 def add_row(row, scenario_type):
-    return {'scenario': row[scenario_type],
+    return {'scenarios': row[scenario_type],
                    'question': row['politeness question'],
                    'left_label': row['left of slider'],
                    'right_label': row['right of slider']}

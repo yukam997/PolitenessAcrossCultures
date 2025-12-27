@@ -16,7 +16,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.0.0"></script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
     <script src="util.js"></script>
-    <script src="stimuli_jp/scenarios.js"></script>
+    <script src="stimuli_en/scenarios.js"></script>
     <link href="styles.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -47,35 +47,35 @@
     // Initialize a timeline (just an empty array)
     var timeline = [];
 
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length/2; i++) {
         if (i%5 == 0) {
             // Shuffle the modifier list every 5 trials
             modifier_list = jsPsych.randomization.shuffle(modifier_list);
         }
         var trial = {
             type: jsPsychHtmlSliderResponse,
-            stimulus: '<p class="stimulus">' + data[2*i]['scenarios'].replace("[modifier]", modifier_list[i%5]) + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i]['question to ask']) + '</b></p>',
+            stimulus: '<p class="stimulus">' + data[2*i]['scenarios'].replace("[modifier]", modifier_list[i%5]) + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i]['question']) + '</b></p>',
             require_movement: true,
             labels: [data[2*i]['left of slider'], data[2*i]['right of slider']],
         };
         timeline.push(trial);
         var trial = {
             type: jsPsychHtmlSliderResponse,
-            stimulus: '<p class="stimulus">' + data[2*i]['scenarios'].replace("[modifier]",'') + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i]['question to ask']) + '</b></p>',
+            stimulus: '<p class="stimulus">' + data[2*i]['scenarios'].replace("[modifier]",'') + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i]['question']) + '</b></p>',
             require_movement: true,
             labels: [data[2*i]['left of slider'], data[2*i]['right of slider']],
         };
         timeline.push(trial);
         var trial = {
             type: jsPsychHtmlSliderResponse,
-            stimulus: '<p class="stimulus">' + data[2*i+1]['scenarios'].replace("[modifier]",  modifier_list[i%5]) + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i+1]['question to ask']) + '</b></p>',
+            stimulus: '<p class="stimulus">' + data[2*i+1]['scenarios'].replace("[modifier]",  modifier_list[i%5]) + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i+1]['question']) + '</b></p>',
             require_movement: true,
             labels: [data[2*i+1]['left of slider'], data[2*i+1]['right of slider']],
         };
         timeline.push(trial);
         var trial = {
             type: jsPsychHtmlSliderResponse,
-            stimulus: '<p class="stimulus">' + data[2*i+1]['scenarios'].replace("[modifier]", '') + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i+1]['question to ask']) + '</b></p>',
+            stimulus: '<p class="stimulus">' + data[2*i+1]['scenarios'].replace("[modifier]", '') + '</p><p class="scale">' + '<b>' + capitalizeFirstLetter(data[2*i+1]['question']) + '</b></p>',
             require_movement: true,
             labels: [data[2*i+1]['left of slider'], data[2*i+1]['right of slider']],
         };
@@ -84,7 +84,7 @@
     timeline = jsPsych.randomization.shuffle(timeline)
     var consent = {
         type: jsPsychExternalHtml,
-        url: "stimuli_jp/consent.html",
+        url: "stimuli_en/consent.html",
         cont_btn: "agree",
     }
     var country = {
